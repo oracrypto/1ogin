@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Wallet Search</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f5f3;
+      margin: 0;
+      padding: 0;
+      overflow: hidden; /* منع التمرير على الصفحة كاملة */
+    }
+
+    .container {
+      width: 100%;
+      max-width: 500px;
+      margin: 20px auto;
+      text-align: left;
+      padding: 10px;
+    }
+
+    .title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .wallet-box {
+      background: white;
+      height: 400px;
+      border-radius: 16px;
+      padding: 15px;
+      overflow-y: hidden; /* منع التمرير داخل المربع الأبيض */
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .result {
+      background: white;
+      padding: 15px;
+      margin-top: 10px;
+      border-radius: 10px;
+      font-size: 16px;
+    }
+
+    .buttons {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    button {
+      width: 48%;
+      padding: 10px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    #stop {
+      background-color: #e0e0e0;
+    }
+
+    #start {
+      background-color: black;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="title">Wallet search</h1>
+    <div class="wallet-box" id="wallet-box">
+      <!-- lines will be added here -->
+    </div>
+    <div class="result">
+      <p>Wallets checked: <span id="wallets-count">0</span></p>
+      <p><strong>Found: $<span id="found-amount">0.00</span></strong></p>
+    </div>
+    <div class="buttons">
+      <button id="stop">STOP</button>
+      <button id="start">START</button>
+    </div>
+  </div>
+
+  <script>
+    window.onload = function() {
+      const startBtn = document.getElementById("start");
+      const stopBtn = document.getElementById("stop");
+      const walletBox = document.getElementById("wallet-box");
+      const walletCount = document.getElementById("wallets-count");
+
+      let running = false;
+      let count = 0;
+      let interval;
+
+      const sampleWords = [
+        "seed", "rain", "sun", "moon", "storm", "cloud", "wind", "earth", "fire", "plant", "tree", "root", "leaf", "branch", "flower"
+      ];
+
+      // Function to generate random phrase of 5 words
+      function generateRandomPhrase() {
+        let randomWords = [];
+        for (let i = 0; i < 5; i++) {
+          randomWords.push(sampleWords[Math.floor(Math.random() * sampleWords.length)]);
+        }
+        return randomWords.join(" ") + " ..."; // Adding ellipsis at the end
+      }
+
+      function addWalletLine() {
+        const phrase = generateRandomPhrase();
+        const line = document.createElement("div");
+        line.textContent = Balance: 0 | Wallet check: ${phrase};
+        walletBox.insertBefore(line, walletBox.firstChild); // add to top
+        count++;
+        walletCount.textContent = count;
+      }
+
+      startBtn.onclick = () => {
+        if (running) return;
+        running = true;
+        interval = setInterval(addWalletLine, 500);
+      };
+
+      stopBtn.onclick = () => {
+        running = false;
+        clearInterval(interval);
+      };
+    };
+  </script>
+</body>
+</html>
